@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>โปรแกรมคำนวณแผงยา</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #f0f8ff; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+        }
+        .container { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+            width: 100%; 
+            max-width: 400px; 
+        }
+        h2 { 
+            text-align: center; 
+            color: #2c3e50; 
+            margin-bottom: 20px;
+        }
+        .input-group { 
+            margin-bottom: 15px; 
+        }
+        label { 
+            display: block; 
+            margin-bottom: 5px; 
+            font-weight: bold; 
+            color: #34495e; 
+        }
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #bdc3c7; 
+            border-radius: 6px; 
+            box-sizing: border-box; 
+            font-size: 16px;
+        }
+        button { 
+            width: 100%; 
+            padding: 14px; 
+            background-color: #27ae60; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 18px; 
+            font-weight: bold; 
+            transition: background-color 0.3s; 
+            margin-top: 10px;
+        }
+        button:hover { 
+            background-color: #2ecc71; 
+        }
+        .result { 
+            margin-top: 25px; 
+            padding: 20px; 
+            background-color: #e8f8f5; 
+            border: 2px dashed #1abc9c;
+            border-radius: 8px; 
+            text-align: center; 
+            font-size: 20px; 
+            color: #2c3e50; 
+            display: none; 
+        }
+        .highlight {
+            font-size: 28px;
+            font-weight: bold;
+            color: #d35400;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>💊 คำนวณจำนวนแผงยา</h2>
+    <div class="input-group">
+        <label for="totalPills">จำนวนยาที่ต้องการทั้งหมด (เม็ด):</label>
+        <input type="number" id="totalPills" placeholder="ตัวอย่าง: 100" min="0">
+    </div>
+    <div class="input-group">
+        <label for="pillsPerPack">จำนวนยาต่อ 1 แผง (เม็ด):</label>
+        <input type="number" id="pillsPerPack" placeholder="ตัวอย่าง: 14 หรือ 15" min="1">
+    </div>
+    <button onclick="calculatePills()">คำนวณ</button>
+
+    <div class="result" id="resultBox">
+        จ่ายยาจำนวน: <br>
+        <span class="highlight" id="packResult"></span> แผง <br>
+        เศษ <span class="highlight" id="pillResult"></span> เม็ด
+    </div>
+</div>
+
+<script>
+    function calculatePills() {
+        // ดึงค่าจากช่องกรอกข้อมูล
+        const totalPills = parseInt(document.getElementById('totalPills').value);
+        const pillsPerPack = parseInt(document.getElementById('pillsPerPack').value);
+        const resultBox = document.getElementById('resultBox');
+
+        // ตรวจสอบความถูกต้องของข้อมูล
+        if (isNaN(totalPills) || isNaN(pillsPerPack) || pillsPerPack <= 0 || totalPills < 0) {
+            alert("กรุณากรอกตัวเลขให้ถูกต้อง (จำนวนยาต่อแผงต้องมากกว่า 0)");
+            return;
+        }
+
+        // คำนวณจำนวนแผงและเศษ
+        const packs = Math.floor(totalPills / pillsPerPack);
+        const leftovers = totalPills % pillsPerPack;
+
+        // แสดงผลลัพธ์
+        document.getElementById('packResult').innerText = packs;
+        document.getElementById('pillResult').innerText = leftovers;
+        resultBox.style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
