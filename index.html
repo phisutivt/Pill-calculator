@@ -3,125 +3,594 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>โปรแกรมคำนวณแผงยา</title>
+    <title>โปรแกรมคำนวณจัดแผงยา</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Sarabun & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #f0f8ff; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            margin: 0; 
+        * {
+            font-family: 'Sarabun', 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
-        .container { 
-            background: white; 
-            padding: 30px; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
-            width: 100%; 
-            max-width: 400px; 
+        /* ซ่อนลูกศรใน input ตัวเลข */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
-        h2 { 
-            text-align: center; 
-            color: #2c3e50; 
-            margin-bottom: 20px;
-        }
-        .input-group { 
-            margin-bottom: 15px; 
-        }
-        label { 
-            display: block; 
-            margin-bottom: 5px; 
-            font-weight: bold; 
-            color: #34495e; 
-        }
-        input { 
-            width: 100%; 
-            padding: 12px; 
-            border: 1px solid #bdc3c7; 
-            border-radius: 6px; 
-            box-sizing: border-box; 
-            font-size: 16px;
-        }
-        button { 
-            width: 100%; 
-            padding: 14px; 
-            background-color: #27ae60; 
-            color: white; 
-            border: none; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            font-size: 18px; 
-            font-weight: bold; 
-            transition: background-color 0.3s; 
-            margin-top: 10px;
-        }
-        button:hover { 
-            background-color: #2ecc71; 
-        }
-        .result { 
-            margin-top: 25px; 
-            padding: 20px; 
-            background-color: #e8f8f5; 
-            border: 2px dashed #1abc9c;
-            border-radius: 8px; 
-            text-align: center; 
-            font-size: 20px; 
-            color: #2c3e50; 
-            display: none; 
-        }
-        .highlight {
-            font-size: 28px;
-            font-weight: bold;
-            color: #d35400;
+        input[type=number] {
+            -moz-appearance: textfield;
         }
     </style>
 </head>
-<body>
+<body class="bg-slate-100/90 text-slate-800 min-h-screen flex items-center justify-center p-3 sm:p-5">
 
-<div class="container">
-    <h2>💊 คำนวณจำนวนแผงยา</h2>
-    <div class="input-group">
-        <label for="totalPills">จำนวนยาที่ต้องการทั้งหมด (เม็ด):</label>
-        <input type="number" id="totalPills" placeholder="ตัวอย่าง: 100" min="0">
-    </div>
-    <div class="input-group">
-        <label for="pillsPerPack">จำนวนยาต่อ 1 แผง (เม็ด):</label>
-        <input type="number" id="pillsPerPack" placeholder="ตัวอย่าง: 14 หรือ 15" min="1">
-    </div>
-    <button onclick="calculatePills()">คำนวณ</button>
+    <!-- Card Container -->
+    <main class="w-full max-w-lg bg-white rounded-3xl shadow-xl shadow-slate-200/70 border border-slate-200/80 overflow-hidden">
+        
+        <!-- Header -->
+        <div class="px-6 pt-6 pb-4 text-center border-b border-slate-100 bg-white">
+            <div class="inline-flex items-center justify-center w-11 h-11 rounded-2xl bg-teal-50 text-teal-600 mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                </svg>
+            </div>
+            <h1 class="text-xl font-bold text-slate-800 tracking-tight">ตัวช่วยคำนวณและจัดยา</h1>
+            <p class="text-xs text-slate-400 mt-0.5">คำนวณแผงยามาตรฐาน และยาที่มีบรรจุภัณฑ์เฉพาะ</p>
+        </div>
 
-    <div class="result" id="resultBox">
-        จ่ายยาจำนวน: <br>
-        <span class="highlight" id="packResult"></span> แผง <br>
-        เศษ <span class="highlight" id="pillResult"></span> เม็ด
-    </div>
-</div>
+        <div class="p-5 sm:p-6 space-y-5">
 
-<script>
-    function calculatePills() {
-        // ดึงค่าจากช่องกรอกข้อมูล
-        const totalPills = parseInt(document.getElementById('totalPills').value);
-        const pillsPerPack = parseInt(document.getElementById('pillsPerPack').value);
-        const resultBox = document.getElementById('resultBox');
+            <!-- 1. ช่องกรอกจำนวนเม็ดที่ต้องการ -->
+            <div class="space-y-1.5">
+                <div class="flex items-center justify-between">
+                    <label for="pillsNeeded" class="text-xs font-bold uppercase tracking-wider text-slate-500">
+                        จำนวนเม็ดที่ต้องการ
+                    </label>
+                    <button type="button" id="clearBtn" class="text-xs text-slate-400 hover:text-rose-500 font-medium transition py-0.5 px-2 rounded-lg hover:bg-rose-50">
+                        ล้างค่า
+                    </button>
+                </div>
+                <div class="relative">
+                    <input 
+                        type="number" 
+                        id="pillsNeeded" 
+                        min="0" 
+                        placeholder="ระบุจำนวนเม็ด (เช่น 30)" 
+                        class="w-full text-center text-2xl font-bold py-3 px-4 bg-slate-50 rounded-2xl border-2 border-slate-200 text-slate-800 focus:outline-none focus:border-teal-500 focus:bg-white transition shadow-inner placeholder:text-slate-300 placeholder:text-base placeholder:font-normal"
+                        inputmode="numeric"
+                        autofocus
+                    >
+                </div>
+            </div>
 
-        // ตรวจสอบความถูกต้องของข้อมูล
-        if (isNaN(totalPills) || isNaN(pillsPerPack) || pillsPerPack <= 0 || totalPills < 0) {
-            alert("กรุณากรอกตัวเลขให้ถูกต้อง (จำนวนยาต่อแผงต้องมากกว่า 0)");
-            return;
+            <!-- 2. ส่วนเลือกโหมด: แผงทั่วไป vs ยาพิเศษ -->
+            <div class="space-y-3">
+                <!-- แผงทั่วไป -->
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">ขนาดแผงมาตรฐาน (เม็ด/แผง)</span>
+                    </div>
+                    <div class="grid grid-cols-4 gap-2" id="standardBtnGroup">
+                        <button type="button" data-mode="standard" data-val="7" class="calc-btn py-2.5 rounded-xl border-2 text-center font-bold text-sm transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300">
+                            7
+                        </button>
+                        <button type="button" data-mode="standard" data-val="14" class="calc-btn py-2.5 rounded-xl border-2 text-center font-bold text-sm transition-all bg-teal-600 border-teal-600 text-white shadow-md shadow-teal-600/25">
+                            14
+                        </button>
+                        <button type="button" data-mode="standard" data-val="15" class="calc-btn py-2.5 rounded-xl border-2 text-center font-bold text-sm transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300">
+                            15
+                        </button>
+                        <button type="button" data-mode="standard" data-val="28" class="calc-btn py-2.5 rounded-xl border-2 text-center font-bold text-sm transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300">
+                            28
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ยาพิเศษ -->
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 flex items-center gap-1 font-semibold">
+                            <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+                            ยาพิเศษเฉพาะรุ่น
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="specialBtnGroup">
+                        <!-- Exjade -->
+                        <button type="button" data-mode="special" data-val="exjade" class="calc-btn py-2 px-1.5 rounded-xl border-2 text-center transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 flex flex-col items-center justify-center">
+                            <span class="font-bold text-sm text-slate-800">Exjade</span>
+                            <span class="text-[10px] text-slate-400 leading-tight mt-0.5">28/กล่อง (7/แผง)</span>
+                        </button>
+                        <!-- Gulvas -->
+                        <button type="button" data-mode="special" data-val="gulvas" class="calc-btn py-2 px-1.5 rounded-xl border-2 text-center transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 flex flex-col items-center justify-center">
+                            <span class="font-bold text-sm text-slate-800">Galvus</span>
+                            <span class="text-[10px] text-slate-400 leading-tight mt-0.5">56/กล่อง (14/แผง)</span>
+                        </button>
+                        <!-- Opalmon -->
+                        <button type="button" data-mode="special" data-val="opalmon" class="calc-btn py-2 px-1.5 rounded-xl border-2 text-center transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 flex flex-col items-center justify-center">
+                            <span class="font-bold text-sm text-slate-800">Opalmon</span>
+                            <span class="text-[10px] text-slate-400 leading-tight mt-0.5">210/ก (42/ห่อ 21/ผ)</span>
+                        </button>
+                        <!-- Lercadip -->
+                        <button type="button" data-mode="special" data-val="lercadip" class="calc-btn py-2 px-1.5 rounded-xl border-2 text-center transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 flex flex-col items-center justify-center">
+                            <span class="font-bold text-sm text-slate-800">Lercadip</span>
+                            <span class="text-[10px] text-slate-400 leading-tight mt-0.5">98/กล่อง (14/แผง)</span>
+                        </button>
+                        <!-- PP90+30 -->
+                        <button type="button" data-mode="special" data-val="pp90_30" class="calc-btn py-2 px-1.5 rounded-xl border-2 text-center transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 flex flex-col items-center justify-center">
+                            <span class="font-bold text-sm text-slate-800">PP90+30</span>
+                            <span class="text-[10px] text-slate-400 leading-tight mt-0.5">90/ใหญ่, 30/เล็ก</span>
+                        </button>
+                        <!-- PP30 -->
+                        <button type="button" data-mode="special" data-val="pp30" class="calc-btn py-2 px-1.5 rounded-xl border-2 text-center transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 flex flex-col items-center justify-center">
+                            <span class="font-bold text-sm text-slate-800">PP30</span>
+                            <span class="text-[10px] text-slate-400 leading-tight mt-0.5">ห่อละ 30 เม็ด</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. ส่วนแสดงผลลัพธ์ -->
+            <div class="pt-1">
+                <div class="bg-gradient-to-br from-teal-800 via-slate-800 to-slate-900 text-white rounded-2xl p-5 shadow-lg shadow-teal-950/20 relative">
+                    
+                    <!-- ส่วนหัวผลลัพธ์และปุ่ม Copy -->
+                    <div class="flex items-center justify-between mb-2 pb-2 border-b border-white/10">
+                        <span id="currentModeLabel" class="text-xs uppercase tracking-wider text-teal-200 font-semibold flex items-center gap-1.5">
+                            แผงมาตรฐาน (14 เม็ด/แผง)
+                        </span>
+                        <button type="button" id="copyBtn" class="inline-flex items-center gap-1 text-[11px] bg-white/10 hover:bg-white/20 active:bg-white/30 text-teal-200 px-2.5 py-1 rounded-lg transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                            <span id="copyBtnText">คัดลอก</span>
+                        </button>
+                    </div>
+                    
+                    <!-- ไฮไลท์คำตอบ A กล่อง + B ห่อ + C แผง + D เม็ด -->
+                    <div id="resultText" class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white my-3 text-center transition-all min-h-[36px] flex items-center justify-center flex-wrap gap-1">
+                        0 แผง + 0 เม็ด
+                    </div>
+
+                    <!-- คำอธิบายย่อย -->
+                    <p id="resultDetail" class="text-xs text-teal-100/70 font-light text-center">
+                        กรอกจำนวนเม็ดด้านบนเพื่อแสดงผล
+                    </p>
+
+                    <!-- การ์ดจำแนกหน่วยย่อยแบบไดนามิก -->
+                    <div id="breakdownGrid" class="mt-4 pt-3.5 border-t border-white/10 grid grid-cols-2 gap-2 text-center text-xs">
+                        <!-- ถูกเติมด้วย JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="py-3 bg-slate-50 border-t border-slate-100 text-center">
+            <span class="text-[11px] text-slate-400 font-medium">เครื่องมือคำนวณและจัดยาสำหรับงานเภสัชกรรม</span>
+        </div>
+    </main>
+
+    <script>
+        // State
+        let pillsNeeded = 0;
+        let currentMode = 'standard'; // 'standard' หรือ 'special'
+        let selectedValue = '14';     // '7' | '14' | '15' | '28' | 'exjade' | 'gulvas' | 'opalmon'
+        let plainResultText = '';     // สำหรับคัดลอก
+
+        // DOM Elements
+        const pillsInput = document.getElementById('pillsNeeded');
+        const clearBtn = document.getElementById('clearBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const copyBtnText = document.getElementById('copyBtnText');
+        const allButtons = document.querySelectorAll('.calc-btn');
+        const currentModeLabel = document.getElementById('currentModeLabel');
+        const resultText = document.getElementById('resultText');
+        const resultDetail = document.getElementById('resultDetail');
+        const breakdownGrid = document.getElementById('breakdownGrid');
+
+        // ฟังก์ชันคำนวณหลัก
+        function calculate() {
+            const count = Math.max(0, pillsNeeded);
+            let displayHTML = '';
+            let detailStr = '';
+            let breakdownHTML = '';
+
+            if (currentMode === 'standard') {
+                const size = parseInt(selectedValue);
+                currentModeLabel.textContent = `แผงมาตรฐาน (${size} เม็ด/แผง)`;
+                
+                const fullPacks = Math.floor(count / size);
+                const loosePills = count % size;
+
+                plainResultText = `${fullPacks} แผง + ${loosePills} เม็ด`;
+
+                if (count === 0) {
+                    displayHTML = `<span class="text-slate-300">0 แผง + 0 เม็ด</span>`;
+                    detailStr = 'กรอกจำนวนเม็ดเพื่อคำนวณ';
+                } else {
+                    displayHTML = `<span class="text-teal-200">${fullPacks} แผง</span> <span class="text-slate-400 font-normal">+</span> <span class="text-amber-300">${loosePills} เม็ด</span>`;
+                    if (loosePills === 0) {
+                        detailStr = `พอดีจำนวน ${fullPacks} แผงเต็ม (ไม่มีเศษ)`;
+                    } else if (fullPacks === 0) {
+                        detailStr = `ไม่ถึง 1 แผง จัดเป็นเศษ ${loosePills} เม็ด`;
+                    } else {
+                        detailStr = `จ่าย ${fullPacks} แผง (${fullPacks * size} เม็ด) + ตัดเศษ ${loosePills} เม็ด`;
+                    }
+                }
+
+                breakdownHTML = `
+                    <div>
+                        <span class="text-teal-200 text-[11px] block">แผงเต็ม</span>
+                        <span class="font-bold text-base text-white">${fullPacks}</span> <span class="text-[10px] text-slate-300">แผง</span>
+                    </div>
+                    <div class="border-l border-white/10">
+                        <span class="text-amber-200 text-[11px] block">เศษเม็ด</span>
+                        <span class="font-bold text-base text-amber-300">${loosePills}</span> <span class="text-[10px] text-slate-300">เม็ด</span>
+                    </div>
+                `;
+
+            } else if (currentMode === 'special') {
+                if (selectedValue === 'exjade') {
+                    // Exjade: 28 เม็ด/กล่อง, 7 เม็ด/แผง
+                    currentModeLabel.textContent = 'Exjade (28 เม็ด/กล่อง, 7 เม็ด/แผง)';
+                    const boxSize = 28;
+                    const packSize = 7;
+
+                    const boxes = Math.floor(count / boxSize);
+                    let rem = count % boxSize;
+                    const packs = Math.floor(rem / packSize);
+                    const pills = rem % packSize;
+
+                    plainResultText = `${boxes} กล่อง + ${packs} แผง + ${pills} เม็ด`;
+
+                    if (count === 0) {
+                        displayHTML = `<span class="text-slate-300">0 กล่อง + 0 แผง + 0 เม็ด</span>`;
+                        detailStr = 'กรอกจำนวนเม็ดเพื่อคำนวณ Exjade';
+                    } else {
+                        displayHTML = `
+                            <span class="text-emerald-300">${boxes} กล่อง</span>
+                            <span class="text-slate-400 font-normal">+</span>
+                            <span class="text-teal-200">${packs} แผง</span>
+                            <span class="text-slate-400 font-normal">+</span>
+                            <span class="text-amber-300">${pills} เม็ด</span>
+                        `;
+                        detailStr = `คิดจาก 1 กล่อง = 4 แผง (28 เม็ด), 1 แผง = 7 เม็ด`;
+                    }
+
+                    breakdownHTML = `
+                        <div class="col-span-2 grid grid-cols-3 gap-1">
+                            <div>
+                                <span class="text-emerald-200 text-[11px] block">กล่องเต็ม</span>
+                                <span class="font-bold text-base text-white">${boxes}</span>
+                            </div>
+                            <div class="border-l border-white/10">
+                                <span class="text-teal-200 text-[11px] block">แผง</span>
+                                <span class="font-bold text-base text-white">${packs}</span>
+                            </div>
+                            <div class="border-l border-white/10">
+                                <span class="text-amber-200 text-[11px] block">เศษเม็ด</span>
+                                <span class="font-bold text-base text-amber-300">${pills}</span>
+                            </div>
+                        </div>
+                    `;
+
+                } else if (selectedValue === 'gulvas') {
+                    // Galvus: 56 เม็ด/กล่อง, 14 เม็ด/แผง
+                    currentModeLabel.textContent = 'Galvus (56 เม็ด/กล่อง, 14 เม็ด/แผง)';
+                    const boxSize = 56;
+                    const packSize = 14;
+
+                    const boxes = Math.floor(count / boxSize);
+                    let rem = count % boxSize;
+                    const packs = Math.floor(rem / packSize);
+                    const pills = rem % packSize;
+
+                    plainResultText = `${boxes} กล่อง + ${packs} แผง + ${pills} เม็ด`;
+
+                    if (count === 0) {
+                        displayHTML = `<span class="text-slate-300">0 กล่อง + 0 แผง + 0 เม็ด</span>`;
+                        detailStr = 'กรอกจำนวนเม็ดเพื่อคำนวณ Galvus';
+                    } else {
+                        displayHTML = `
+                            <span class="text-emerald-300">${boxes} กล่อง</span>
+                            <span class="text-slate-400 font-normal">+</span>
+                            <span class="text-teal-200">${packs} แผง</span>
+                            <span class="text-slate-400 font-normal">+</span>
+                            <span class="text-amber-300">${pills} เม็ด</span>
+                        `;
+                        detailStr = `คิดจาก 1 กล่อง = 4 แผง (56 เม็ด), 1 แผง = 14 เม็ด`;
+                    }
+
+                    breakdownHTML = `
+                        <div class="col-span-2 grid grid-cols-3 gap-1">
+                            <div>
+                                <span class="text-emerald-200 text-[11px] block">กล่องเต็ม</span>
+                                <span class="font-bold text-base text-white">${boxes}</span>
+                            </div>
+                            <div class="border-l border-white/10">
+                                <span class="text-teal-200 text-[11px] block">แผง</span>
+                                <span class="font-bold text-base text-white">${packs}</span>
+                            </div>
+                            <div class="border-l border-white/10">
+                                <span class="text-amber-200 text-[11px] block">เศษเม็ด</span>
+                                <span class="font-bold text-base text-amber-300">${pills}</span>
+                            </div>
+                        </div>
+                    `;
+
+                } else if (selectedValue === 'opalmon') {
+                    // Opalmon: 210 เม็ด/กล่อง, 42 เม็ด/ห่อ, 21 เม็ด/แผง
+                    currentModeLabel.textContent = 'Opalmon (210/กล่อง, 42/ห่อ, 21/แผง)';
+                    const boxSize = 210;
+                    const packSize = 42;  // 1 ห่อ = 42 เม็ด
+                    const stripSize = 21; // 1 แผง = 21 เม็ด
+
+                    const boxes = Math.floor(count / boxSize);
+                    let rem = count % boxSize;
+                    const bundles = Math.floor(rem / packSize); // ห่อ
+                    rem = rem % packSize;
+                    const strips = Math.floor(rem / stripSize); // แผง
+                    const pills = rem % stripSize;             // เม็ด
+
+                    plainResultText = `${boxes} กล่อง + ${bundles} ห่อ + ${strips} แผง + ${pills} เม็ด`;
+
+                    if (count === 0) {
+                        displayHTML = `<span class="text-slate-300">0 กล่อง + 0 ห่อ + 0 แผง + 0 เม็ด</span>`;
+                        detailStr = 'กรอกจำนวนเม็ดเพื่อคำนวณ Opalmon';
+                    } else {
+                        displayHTML = `
+                            <span class="text-emerald-300">${boxes} กล่อง</span>
+                            <span class="text-slate-400 font-normal">+</span>
+                            <span class="text-cyan-200">${bundles} ห่อ</span>
+                            <span class="text-slate-400 font-normal">+</span>
+                            <span class="text-teal-200">${strips} แผง</span>
+                            <span class="text-slate-400 font-normal">+</span>
+                            <span class="text-amber-300">${pills} เม็ด</span>
+                        `;
+                        detailStr = `1 กล่อง = 5 ห่อ (210 เม็ด) | 1 ห่อ = 2 แผง (42 เม็ด) | 1 แผง = 21 เม็ด`;
+                    }
+
+                    breakdownHTML = `
+                        <div class="col-span-2 grid grid-cols-4 gap-1">
+                            <div>
+                                <span class="text-emerald-200 text-[10px] block">กล่อง</span>
+                                <span class="font-bold text-sm sm:text-base text-white">${boxes}</span>
+                            </div>
+                            <div class="border-l border-white/10">
+                                <span class="text-cyan-200 text-[10px] block">ห่อ</span>
+                                <span class="font-bold text-sm sm:text-base text-white">${bundles}</span>
+                            </div>
+                            <div class="border-l border-white/10">
+                                <span class="text-teal-200 text-[10px] block">แผง</span>
+                                <span class="font-bold text-sm sm:text-base text-white">${strips}</span>
+                            </div>
+                            <div class="border-l border-white/10">
+                                <span class="text-amber-200 text-[10px] block">เม็ด</span>
+                                <span class="font-bold text-sm sm:text-base text-amber-300">${pills}</span>
+                            </div>
+                        </div>
+                    `;
+                } else if (selectedValue === 'lercadip') {
+                    // Lercadip: 98 เม็ด/กล่อง, 14 เม็ด/แผง
+                    currentModeLabel.textContent = 'Lercadip (98 เม็ด/กล่อง, 14 เม็ด/แผง)';
+                    const boxSize = 98;
+                    const packSize = 14;
+
+                    const boxes = Math.floor(count / boxSize);
+                    let rem = count % boxSize;
+                    const packs = Math.floor(rem / packSize);
+                    const pills = rem % packSize;
+
+                    plainResultText = `${boxes} กล่อง + ${packs} แผง + ${pills} เม็ด`;
+
+                    if (count === 0) {
+                        displayHTML = `<span class="text-slate-300">0 กล่อง + 0 แผง + 0 เม็ด</span>`;
+                        detailStr = 'กรอกจำนวนเม็ดเพื่อคำนวณ Lercadip';
+                    } else {
+                        displayHTML = `
+                            <span class="text-emerald-300">${boxes} กล่อง</span>
+                            <span class="text-slate-400 font-normal">+</span>
+                            <span class="text-teal-200">${packs} แผง</span>
+                            <span class="text-slate-400 font-normal">+</span>
+                            <span class="text-amber-300">${pills} เม็ด</span>
+                        `;
+                        detailStr = `คิดจาก 1 กล่อง = 7 แผง (98 เม็ด), 1 แผง = 14 เม็ด`;
+                    }
+
+                    breakdownHTML = `
+                        <div class="col-span-2 grid grid-cols-3 gap-1">
+                            <div>
+                                <span class="text-emerald-200 text-[11px] block">กล่องเต็ม</span>
+                                <span class="font-bold text-base text-white">${boxes}</span>
+                            </div>
+                            <div class="border-l border-white/10">
+                                <span class="text-teal-200 text-[11px] block">แผง</span>
+                                <span class="font-bold text-base text-white">${packs}</span>
+                            </div>
+                            <div class="border-l border-white/10">
+                                <span class="text-amber-200 text-[11px] block">เศษเม็ด</span>
+                                <span class="font-bold text-base text-amber-300">${pills}</span>
+                            </div>
+                        </div>
+                    `;
+
+                } else if (selectedValue === 'pp90_30') {
+                    // PP90+30: 90 เม็ดต่อห่อใหญ่, 30 เม็ดต่อห่อเล็ก
+                    currentModeLabel.textContent = 'PP90+30 (90 เม็ด/ห่อใหญ่, 30 เม็ด/ห่อเล็ก)';
+                    const bigPackSize = 90;
+                    const smallPackSize = 30;
+
+                    const bigPacks = Math.floor(count / bigPackSize);
+                    let rem = count % bigPackSize;
+                    const smallPacks = Math.floor(rem / smallPackSize);
+                    const pills = rem % smallPackSize;
+
+                    plainResultText = `${bigPacks} ห่อใหญ่ + ${smallPacks} ห่อเล็ก + ${pills} เม็ด`;
+
+                    if (count === 0) {
+                        displayHTML = `<span class="text-slate-300">0 ห่อใหญ่ + 0 ห่อเล็ก + 0 เม็ด</span>`;
+                        detailStr = 'กรอกจำนวนเม็ดเพื่อคำนวณ PP90+30';
+                    } else {
+                        displayHTML = `
+                            <span class="text-emerald-300">${bigPacks} ห่อใหญ่</span>
+                            <span class="text-slate-400 font-normal">+</span>
+                            <span class="text-cyan-200">${smallPacks} ห่อเล็ก</span>
+                            <span class="text-slate-400 font-normal">+</span>
+                            <span class="text-amber-300">${pills} เม็ด</span>
+                        `;
+                        detailStr = `คิดจาก 1 ห่อใหญ่ = 90 เม็ด, 1 ห่อเล็ก = 30 เม็ด`;
+                    }
+
+                    breakdownHTML = `
+                        <div class="col-span-2 grid grid-cols-3 gap-1">
+                            <div>
+                                <span class="text-emerald-200 text-[11px] block">ห่อใหญ่ (90)</span>
+                                <span class="font-bold text-base text-white">${bigPacks}</span>
+                            </div>
+                            <div class="border-l border-white/10">
+                                <span class="text-cyan-200 text-[11px] block">ห่อเล็ก (30)</span>
+                                <span class="font-bold text-base text-white">${smallPacks}</span>
+                            </div>
+                            <div class="border-l border-white/10">
+                                <span class="text-amber-200 text-[11px] block">เศษเม็ด</span>
+                                <span class="font-bold text-base text-amber-300">${pills}</span>
+                            </div>
+                        </div>
+                    `;
+
+                } else if (selectedValue === 'pp30') {
+                    // PP30: 30 เม็ดต่อห่อ
+                    currentModeLabel.textContent = 'PP30 (30 เม็ด/ห่อ)';
+                    const packSize = 30;
+
+                    const packs = Math.floor(count / packSize);
+                    const pills = count % packSize;
+
+                    plainResultText = `${packs} ห่อ + ${pills} เม็ด`;
+
+                    if (count === 0) {
+                        displayHTML = `<span class="text-slate-300">0 ห่อ + 0 เม็ด</span>`;
+                        detailStr = 'กรอกจำนวนเม็ดเพื่อคำนวณ PP30';
+                    } else {
+                        displayHTML = `
+                            <span class="text-teal-200">${packs} ห่อ</span>
+                            <span class="text-slate-400 font-normal">+</span>
+                            <span class="text-amber-300">${pills} เม็ด</span>
+                        `;
+                        if (pills === 0) {
+                            detailStr = `พอดีจำนวน ${packs} ห่อเต็ม (ไม่มีเศษ)`;
+                        } else if (packs === 0) {
+                            detailStr = `ไม่ถึง 1 ห่อ จัดเป็นเศษ ${pills} เม็ด`;
+                        } else {
+                            detailStr = `จ่าย ${packs} ห่อ (${packs * packSize} เม็ด) + ตัดเศษ ${pills} เม็ด`;
+                        }
+                    }
+
+                    breakdownHTML = `
+                        <div>
+                            <span class="text-teal-200 text-[11px] block">ห่อเต็ม (30)</span>
+                            <span class="font-bold text-base text-white">${packs}</span> <span class="text-[10px] text-slate-300">ห่อ</span>
+                        </div>
+                        <div class="border-l border-white/10">
+                            <span class="text-amber-200 text-[11px] block">เศษเม็ด</span>
+                            <span class="font-bold text-base text-amber-300">${pills}</span> <span class="text-[10px] text-slate-300">เม็ด</span>
+                        </div>
+                    `;
+                }
+            }
+
+            resultText.innerHTML = displayHTML;
+            resultDetail.textContent = detailStr;
+            breakdownGrid.innerHTML = breakdownHTML;
         }
 
-        // คำนวณจำนวนแผงและเศษ
-        const packs = Math.floor(totalPills / pillsPerPack);
-        const leftovers = totalPills % pillsPerPack;
+        // จัดการ UI ไฮไลท์ปุ่มที่ถูกเลือก
+        function updateButtonStyles() {
+            allButtons.forEach(btn => {
+                const bMode = btn.getAttribute('data-mode');
+                const bVal = btn.getAttribute('data-val');
 
-        // แสดงผลลัพธ์
-        document.getElementById('packResult').innerText = packs;
-        document.getElementById('pillResult').innerText = leftovers;
-        resultBox.style.display = 'block';
-    }
-</script>
+                const isSelected = (bMode === currentMode && bVal === selectedValue);
 
+                if (isSelected) {
+                    if (bMode === 'standard') {
+                        btn.className = 'calc-btn py-2.5 rounded-xl border-2 text-center font-bold text-sm transition-all bg-teal-600 border-teal-600 text-white shadow-md shadow-teal-600/25 scale-[1.02]';
+                    } else {
+                        btn.className = 'calc-btn py-2 px-1.5 rounded-xl border-2 text-center transition-all bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-600/25 scale-[1.02] flex flex-col items-center justify-center';
+                        // สลับสีตัวหนังสือข้างในให้อ่านง่าย
+                        const spans = btn.querySelectorAll('span');
+                        if (spans.length >= 2) {
+                            spans[0].className = 'font-bold text-sm text-white';
+                            spans[1].className = 'text-[10px] text-indigo-100 leading-tight mt-0.5';
+                        }
+                    }
+                } else {
+                    if (bMode === 'standard') {
+                        btn.className = 'calc-btn py-2.5 rounded-xl border-2 text-center font-bold text-sm transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300';
+                    } else {
+                        btn.className = 'calc-btn py-2 px-1.5 rounded-xl border-2 text-center transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 flex flex-col items-center justify-center';
+                        const spans = btn.querySelectorAll('span');
+                        if (spans.length >= 2) {
+                            spans[0].className = 'font-bold text-sm text-slate-800';
+                            spans[1].className = 'text-[10px] text-slate-400 leading-tight mt-0.5';
+                        }
+                    }
+                }
+            });
+        }
+
+        // Event Listeners สำหรับปุ่มทั้งหมด
+        allButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentMode = btn.getAttribute('data-mode');
+                selectedValue = btn.getAttribute('data-val');
+                updateButtonStyles();
+                calculate();
+            });
+        });
+
+        // Event Listener สำหรับช่องกรอกตัวเลข
+        pillsInput.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            pillsNeeded = isNaN(val) || val < 0 ? 0 : val;
+            calculate();
+        });
+
+        // ล้างค่า
+        clearBtn.addEventListener('click', () => {
+            pillsNeeded = 0;
+            pillsInput.value = '';
+            calculate();
+            pillsInput.focus();
+        });
+
+        // คัดลอกผลลัพธ์
+        copyBtn.addEventListener('click', () => {
+            if (!plainResultText) return;
+            const fullText = `${currentModeLabel.textContent}: ${pillsNeeded} เม็ด = ${plainResultText}`;
+            
+            // Clipboard copy via execCommand for iframe safety
+            const tempInput = document.createElement('textarea');
+            tempInput.value = fullText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            copyBtnText.textContent = 'คัดลอกแล้ว!';
+            setTimeout(() => {
+                copyBtnText.textContent = 'คัดลอก';
+            }, 1800);
+        });
+
+        // คำนวณเริ่มต้น
+        updateButtonStyles();
+        calculate();
+    </script>
 </body>
 </html>
