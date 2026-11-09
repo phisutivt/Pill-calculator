@@ -44,8 +44,8 @@
 
         <div class="p-5 sm:p-6 space-y-5">
 
-            <!-- 1. ช่องกรอกจำนวนเม็ดที่ต้องการ -->
-            <div class="space-y-1.5">
+            <!-- 1. ช่องกรอกจำนวนเม็ดที่ต้องการ พร้อมแถบเลื่อน -->
+            <div class="space-y-2">
                 <div class="flex items-center justify-between">
                     <label for="pillsNeeded" class="text-xs font-bold uppercase tracking-wider text-slate-500">
                         จำนวนเม็ดที่ต้องการ
@@ -59,81 +59,49 @@
                         type="number" 
                         id="pillsNeeded" 
                         min="0" 
+                        max="1000"
                         placeholder="ระบุจำนวนเม็ด (เช่น 30)" 
                         class="w-full text-center text-2xl font-bold py-3 px-4 bg-slate-50 rounded-2xl border-2 border-slate-200 text-slate-800 focus:outline-none focus:border-teal-500 focus:bg-white transition shadow-inner placeholder:text-slate-300 placeholder:text-base placeholder:font-normal"
                         inputmode="numeric"
                         autofocus
                     >
                 </div>
-            </div>
-
-            <!-- 2. ส่วนเลือกโหมด: แผงทั่วไป vs ยาพิเศษ -->
-            <div class="space-y-3">
-                <!-- แผงทั่วไป -->
-                <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">ขนาดแผงมาตรฐาน (เม็ด/แผง)</span>
-                    </div>
-                    <div class="grid grid-cols-4 gap-2" id="standardBtnGroup">
-                        <button type="button" data-mode="standard" data-val="7" class="calc-btn py-2.5 rounded-xl border-2 text-center font-bold text-sm transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300">
-                            7
-                        </button>
-                        <button type="button" data-mode="standard" data-val="14" class="calc-btn py-2.5 rounded-xl border-2 text-center font-bold text-sm transition-all bg-teal-600 border-teal-600 text-white shadow-md shadow-teal-600/25">
-                            14
-                        </button>
-                        <button type="button" data-mode="standard" data-val="15" class="calc-btn py-2.5 rounded-xl border-2 text-center font-bold text-sm transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300">
-                            15
-                        </button>
-                        <button type="button" data-mode="standard" data-val="28" class="calc-btn py-2.5 rounded-xl border-2 text-center font-bold text-sm transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300">
-                            28
-                        </button>
-                    </div>
-                </div>
-
-                <!-- ยาพิเศษ -->
-                <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 flex items-center gap-1 font-semibold">
-                            <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
-                            ยาพิเศษเฉพาะรุ่น
-                        </span>
-                    </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="specialBtnGroup">
-                        <!-- Exjade -->
-                        <button type="button" data-mode="special" data-val="exjade" class="calc-btn py-2 px-1.5 rounded-xl border-2 text-center transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 flex flex-col items-center justify-center">
-                            <span class="font-bold text-sm text-slate-800">Exjade</span>
-                            <span class="text-[10px] text-slate-400 leading-tight mt-0.5">28/กล่อง (7/แผง)</span>
-                        </button>
-                        <!-- Gulvas -->
-                        <button type="button" data-mode="special" data-val="gulvas" class="calc-btn py-2 px-1.5 rounded-xl border-2 text-center transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 flex flex-col items-center justify-center">
-                            <span class="font-bold text-sm text-slate-800">Galvus</span>
-                            <span class="text-[10px] text-slate-400 leading-tight mt-0.5">56/กล่อง (14/แผง)</span>
-                        </button>
-                        <!-- Opalmon -->
-                        <button type="button" data-mode="special" data-val="opalmon" class="calc-btn py-2 px-1.5 rounded-xl border-2 text-center transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 flex flex-col items-center justify-center">
-                            <span class="font-bold text-sm text-slate-800">Opalmon</span>
-                            <span class="text-[10px] text-slate-400 leading-tight mt-0.5">210/ก (42/ห่อ 21/ผ)</span>
-                        </button>
-                        <!-- Lercadip -->
-                        <button type="button" data-mode="special" data-val="lercadip" class="calc-btn py-2 px-1.5 rounded-xl border-2 text-center transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 flex flex-col items-center justify-center">
-                            <span class="font-bold text-sm text-slate-800">Lercadip</span>
-                            <span class="text-[10px] text-slate-400 leading-tight mt-0.5">98/กล่อง (14/แผง)</span>
-                        </button>
-                        <!-- PP90+30 -->
-                        <button type="button" data-mode="special" data-val="pp90_30" class="calc-btn py-2 px-1.5 rounded-xl border-2 text-center transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 flex flex-col items-center justify-center">
-                            <span class="font-bold text-sm text-slate-800">PP90+30</span>
-                            <span class="text-[10px] text-slate-400 leading-tight mt-0.5">90/ใหญ่, 30/เล็ก</span>
-                        </button>
-                        <!-- PP30 -->
-                        <button type="button" data-mode="special" data-val="pp30" class="calc-btn py-2 px-1.5 rounded-xl border-2 text-center transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 flex flex-col items-center justify-center">
-                            <span class="font-bold text-sm text-slate-800">PP30</span>
-                            <span class="text-[10px] text-slate-400 leading-tight mt-0.5">ห่อละ 30 เม็ด</span>
-                        </button>
-                    </div>
+                <!-- แถบเลื่อน (Slider) ปรับค่าเพิ่ม-ลดแบบรูด -->
+                <div class="px-1 pt-2">
+                    <input 
+                        type="range" 
+                        id="pillsSlider" 
+                        min="0" 
+                        max="1000" 
+                        step="1" 
+                        value="0" 
+                        class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-teal-600"
+                    >
                 </div>
             </div>
 
-            <!-- 3. ส่วนแสดงผลลัพธ์ -->
+            <!-- 2. ส่วนเลือกโหมด: แผงทั่วไป -->
+            <div>
+                <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500">ขนาดแผงมาตรฐาน (เม็ด/แผง)</span>
+                </div>
+                <div class="grid grid-cols-4 gap-2" id="standardBtnGroup">
+                    <button type="button" data-mode="standard" data-val="7" class="calc-btn py-2.5 rounded-xl border-2 text-center font-bold text-sm transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300">
+                        7
+                    </button>
+                    <button type="button" data-mode="standard" data-val="14" class="calc-btn py-2.5 rounded-xl border-2 text-center font-bold text-sm transition-all bg-teal-600 border-teal-600 text-white shadow-md shadow-teal-600/25">
+                        14
+                    </button>
+                    <button type="button" data-mode="standard" data-val="15" class="calc-btn py-2.5 rounded-xl border-2 text-center font-bold text-sm transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300">
+                        15
+                    </button>
+                    <button type="button" data-mode="standard" data-val="28" class="calc-btn py-2.5 rounded-xl border-2 text-center font-bold text-sm transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300">
+                        28
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3. ส่วนแสดงผลลัพธ์ (ย้ายขึ้นมาเหนือยาพิเศษ) -->
             <div class="pt-1">
                 <div class="bg-gradient-to-br from-teal-800 via-slate-800 to-slate-900 text-white rounded-2xl p-5 shadow-lg shadow-teal-950/20 relative">
                     
@@ -150,7 +118,7 @@
                         </button>
                     </div>
                     
-                    <!-- ไฮไลท์คำตอบ A กล่อง + B ห่อ + C แผง + D เม็ด -->
+                    <!-- ไฮไลท์คำตอบ -->
                     <div id="resultText" class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white my-3 text-center transition-all min-h-[36px] flex items-center justify-center flex-wrap gap-1">
                         0 แผง + 0 เม็ด
                     </div>
@@ -167,6 +135,53 @@
                 </div>
             </div>
 
+            <!-- 4. ยาพิเศษเฉพาะรุ่น -->
+            <div class="pt-2 border-t border-slate-200/80">
+                <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 flex items-center gap-1 font-semibold">
+                        <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+                        ยาพิเศษเฉพาะรุ่น
+                    </span>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="specialBtnGroup">
+                    <!-- Exjade -->
+                    <button type="button" data-mode="special" data-val="exjade" class="calc-btn py-2 px-1.5 rounded-xl border-2 text-center transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 flex flex-col items-center justify-center">
+                        <span class="font-bold text-sm text-slate-800">Exjade</span>
+                        <span class="text-[10px] text-slate-400 leading-tight mt-0.5">28/กล่อง (7/แผง)</span>
+                    </button>
+                    <!-- Gulvas -->
+                    <button type="button" data-mode="special" data-val="gulvas" class="calc-btn py-2 px-1.5 rounded-xl border-2 text-center transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 flex flex-col items-center justify-center">
+                        <span class="font-bold text-sm text-slate-800">Galvus</span>
+                        <span class="text-[10px] text-slate-400 leading-tight mt-0.5">56/กล่อง (14/แผง)</span>
+                    </button>
+                    <!-- Ivabradine (ใหม่) -->
+                    <button type="button" data-mode="special" data-val="ivabradine" class="calc-btn py-2 px-1.5 rounded-xl border-2 text-center transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 flex flex-col items-center justify-center">
+                        <span class="font-bold text-sm text-slate-800">Ivabradine</span>
+                        <span class="text-[10px] text-slate-400 leading-tight mt-0.5">56/กล่อง (14/แผง)</span>
+                    </button>
+                    <!-- Lercadip -->
+                    <button type="button" data-mode="special" data-val="lercadip" class="calc-btn py-2 px-1.5 rounded-xl border-2 text-center transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 flex flex-col items-center justify-center">
+                        <span class="font-bold text-sm text-slate-800">Lercadip</span>
+                        <span class="text-[10px] text-slate-400 leading-tight mt-0.5">98/กล่อง (14/แผง)</span>
+                    </button>
+                    <!-- Opalmon (กินพื้นที่ 2 คอลัมน์บนจอใหญ่) -->
+                    <button type="button" data-mode="special" data-val="opalmon" class="calc-btn py-2 px-1.5 rounded-xl border-2 text-center transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 flex flex-col items-center justify-center sm:col-span-2">
+                        <span class="font-bold text-sm text-slate-800">Opalmon</span>
+                        <span class="text-[10px] text-slate-400 leading-tight mt-0.5">210/ก (42/ห่อ 21/ผ)</span>
+                    </button>
+                    <!-- PP90+30 -->
+                    <button type="button" data-mode="special" data-val="pp90_30" class="calc-btn py-2 px-1.5 rounded-xl border-2 text-center transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 flex flex-col items-center justify-center">
+                        <span class="font-bold text-sm text-slate-800">PP90+30</span>
+                        <span class="text-[10px] text-slate-400 leading-tight mt-0.5">90/ใหญ่, 30/เล็ก</span>
+                    </button>
+                    <!-- PP30 -->
+                    <button type="button" data-mode="special" data-val="pp30" class="calc-btn py-2 px-1.5 rounded-xl border-2 text-center transition-all bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 flex flex-col items-center justify-center">
+                        <span class="font-bold text-sm text-slate-800">PP30</span>
+                        <span class="text-[10px] text-slate-400 leading-tight mt-0.5">ห่อละ 30 เม็ด</span>
+                    </button>
+                </div>
+            </div>
+
         </div>
 
         <!-- Footer -->
@@ -178,12 +193,13 @@
     <script>
         // State
         let pillsNeeded = 0;
-        let currentMode = 'standard'; // 'standard' หรือ 'special'
-        let selectedValue = '14';     // '7' | '14' | '15' | '28' | 'exjade' | 'gulvas' | 'opalmon'
+        let currentMode = 'standard'; // เพิ่มตัวแปรที่หายไป
+        let selectedValue = '14';     // '7' | '14' | '15' | '28' | 'exjade' | 'gulvas' | 'opalmon' ...
         let plainResultText = '';     // สำหรับคัดลอก
 
         // DOM Elements
         const pillsInput = document.getElementById('pillsNeeded');
+        const pillsSlider = document.getElementById('pillsSlider');
         const clearBtn = document.getElementById('clearBtn');
         const copyBtn = document.getElementById('copyBtn');
         const copyBtnText = document.getElementById('copyBtnText');
@@ -279,9 +295,10 @@
                         </div>
                     `;
 
-                } else if (selectedValue === 'gulvas') {
-                    // Galvus: 56 เม็ด/กล่อง, 14 เม็ด/แผง
-                    currentModeLabel.textContent = 'Galvus (56 เม็ด/กล่อง, 14 เม็ด/แผง)';
+                } else if (selectedValue === 'gulvas' || selectedValue === 'ivabradine') {
+                    // Galvus และ Ivabradine: 56 เม็ด/กล่อง, 14 เม็ด/แผง
+                    const medName = selectedValue === 'gulvas' ? 'Galvus' : 'Ivabradine';
+                    currentModeLabel.textContent = `${medName} (56 เม็ด/กล่อง, 14 เม็ด/แผง)`;
                     const boxSize = 56;
                     const packSize = 14;
 
@@ -294,7 +311,7 @@
 
                     if (count === 0) {
                         displayHTML = `<span class="text-slate-300">0 กล่อง + 0 แผง + 0 เม็ด</span>`;
-                        detailStr = 'กรอกจำนวนเม็ดเพื่อคำนวณ Galvus';
+                        detailStr = `กรอกจำนวนเม็ดเพื่อคำนวณ ${medName}`;
                     } else {
                         displayHTML = `
                             <span class="text-emerald-300">${boxes} กล่อง</span>
@@ -558,6 +575,17 @@
         pillsInput.addEventListener('input', (e) => {
             const val = parseInt(e.target.value);
             pillsNeeded = isNaN(val) || val < 0 ? 0 : val;
+            if (pillsNeeded <= parseInt(pillsSlider.max)) {
+                pillsSlider.value = pillsNeeded; // Sync กับ slider
+            }
+            calculate();
+        });
+
+        // Event Listener สำหรับแถบเลื่อน (Slider)
+        pillsSlider.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            pillsNeeded = isNaN(val) || val < 0 ? 0 : val;
+            pillsInput.value = pillsNeeded > 0 ? pillsNeeded : ''; // Sync กับช่องกรอกตัวเลข
             calculate();
         });
 
@@ -565,6 +593,7 @@
         clearBtn.addEventListener('click', () => {
             pillsNeeded = 0;
             pillsInput.value = '';
+            pillsSlider.value = 0;
             calculate();
             pillsInput.focus();
         });
